@@ -1,4 +1,6 @@
-const data: Record<TProductId, TProduct> = {
+import { TProduct } from "utils/types"
+
+const data: Record<string, TProduct> = {
 	'2zd33b8c': {
 		name: 'Maluma Hass Avocado',
 		id: '2zd33b8c',

@@ -1,26 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { FC } from "react";
+import { TProduct } from "utils/types";
 
-type product = {
-  id: string;
-  name: string;
-  sku: string;
-  price: number;
-  image: string;
-  attributes: {
-    description: string;
-    shape: string;
-    hardiness: string;
-    taste: string;
-  };
+type TProductCard = {
+  product: TProduct;
 };
 
-type props = {
-  product: product;
-};
-
-const ProductCard: FC<props> = ({ product }) => {
+const ProductCard: FC<TProductCard> = ({ product }) => {
   return (
     <article className="card" style={{ width: 350, height: 550 }}>
       <picture className="relative" style={{ maxWidth: 300 }}>
@@ -30,7 +17,7 @@ const ProductCard: FC<props> = ({ product }) => {
           width={0}
           height={0}
           sizes="100%"
-          style={{ width: "100%", height: "auto" }} // optional
+          style={{ width: "100%", height: "auto" }}
         />
       </picture>
       <section className="card-body d-grid">
@@ -40,7 +27,6 @@ const ProductCard: FC<props> = ({ product }) => {
           <small className="fw-bold fs-4">${product.price}</small>
         </div>
         <div className="d-flex justify-content-between align-self-end">
-          <button className="btn btn-primary">Add to card</button>
           <Link href={`products/${product.id}`} key={product.id}>
             <button className="btn btn-secondary">View details</button>
           </Link>

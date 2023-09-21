@@ -1,29 +1,64 @@
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
+import { TProduct } from "utils/types";
+import DB from "@database";
 
-const Product = () => {
-  const [product, setProduct] = useState<any>({});
-  const {
-    query: { id },
-  } = useRouter();
+export const getStaticPaths = async () => {
+  const Database = new DB();
+  const response = await Database.getAll();
 
-  useEffect(() => {
-    if (id) {
-      window
-        .fetch(`/api/avo/${id}`)
-        .then((response) => response.json())
-        .then((response) => {
-          setProduct(response);
-        });
-    }
-  }, [id]);
+  const paths = response.map(({ id }) => ({
+    params: {
+      id,
+    },
+  }));
 
+  return {
+    paths,
+    fallback: false,
+  };
+};
+
+export const getStaticProps = async ({ params }) => {
+  const id = params.id;
+  const Database = new DB();
+  const response = await Database.getById(id);
+
+  return {
+    props: {
+      product: response,
+    },
+  };
+};
+
+const Product: FC<{ product: TProduct }> = ({ product }) => {
   return (
-    <div>
-      <h1>Product ID: {product.id}</h1>
-      <h1>Product Name: {product.name}</h1>
-      <h1>Product Image URL: {product.image}</h1>
-    </div>
+    <section className="container">
+      <section className="d-flex align-items-center">
+        <img src={product.image} alt={product.name} />
+
+        <section>
+          <h2 className="fs-3">
+            <strong>Name:</strong> {product.name}
+          </h2>
+          <p className="fs-5">
+            <strong>SKU:</strong> {product.sku}
+          </p>
+          <p className="fs-5">
+            <strong>Taste:</strong> {product.attributes.taste}
+          </p>
+          <p className="fs-5">
+            <strong>Price:</strong> ${product.price}
+          </p>
+          <p className="fs-5">
+            <strong>Shape:</strong> {product.attributes.shape}
+          </p>
+          <p className="fs-5">
+            <strong>Hardiness:</strong> {product.attributes.hardiness}
+          </p>
+        </section>
+      </section>
+    </section>
   );
 };
 

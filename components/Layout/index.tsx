@@ -11,7 +11,7 @@ const Layout: FC<Props> = ({ children }) => {
     <>
       <Navbar />
       {children}
-      <footer>
+      <footer className="container text-center">
         <p>All rights reserved</p>
       </footer>
     </>
